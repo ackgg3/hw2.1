@@ -106,8 +106,8 @@ void waiter(int this_id, int p_in)
 		if(st.MPI_TAG == CHOP_REL)
 		{
 			//set forks free
-			chops[source % p] = false;
-			chops[source - 1] = false;
+			chops[source % p] = true;
+			chops[source - 1] = true;
 
 			//scan queue if there's waiting
 			if(!q.empty())
