@@ -38,7 +38,7 @@ void phil(int this_id)
 		MPI_Send(&sigOut, 1, MPI_INT, 0, CHOP_REQ, MPI_COMM_WORLD); //Ask for chopsticks
 		MPI_Recv(&sigIn, 1, MPI_INT, 0, CHOP_RES, MPI_COMM_WORLD, &st); //Wait for chopsticks
 		printf("Philosopher %d is writing %d \n", id, msgSent);
-
+		msgSent++;
 		//Do the thing
 
 		MPI_Send(&sigOut, 1, MPI_INT, 0, CHOP_REL, MPI_COMM_WORLD); //Release chopsticks
@@ -74,10 +74,6 @@ void waiter(int this_id, int p_in)
 	while(done != p)
 	{
 		printf("Scanning... %d/%d\n", done, p);
-		for(int j = 0; j < p; j++)
-		{
-			printf("%d, ", chops[j]);
-		}
 		//get signals
 		MPI_Recv(&sigIn, 1, MPI_INT, MPI_ANY_SOURCE,MPI_ANY_TAG, MPI_COMM_WORLD, &st);
 		source = st.MPI_SOURCE;
