@@ -25,9 +25,10 @@
 
 const string fileBase = "outFile";
 
-void phil(int this_id)
+void phil(int this_id, int p_in)
 {
 	int id = this_id;
+	int p = p_in - 1;
 	int sigIn;
 	int sigOut;
 	int msgSent = 0;
@@ -203,7 +204,7 @@ int main(int argc, char** argv)
 	} 
 	else 
 	{
-		phil(id); //spawn philosopher
+		phil(id,p); //spawn philosopher
 	}
 
 	//We're done!
