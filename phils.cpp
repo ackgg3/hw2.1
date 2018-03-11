@@ -5,9 +5,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <fstream>
 #include <list>
 #include <unistd.h>
 #include "mpi.h"
+#include "pomerize.h"
 
 //Defining run limits
 #define MAXMESSAGES 10
@@ -18,6 +20,8 @@
 #define CHOP_REL 3	//release
 #define PHIL_DONE 4 //philosopher is done
 
+const string fileBase = "outFile";
+
 void phil(int this_id)
 {
 	int id = this_id;
@@ -27,6 +31,17 @@ void phil(int this_id)
 	MPI_Status st;
 
 	srand(id + time(NULL));
+
+	//filesetup
+	pomerize P; //Poem generator object
+
+	int leftNeighbor = id;
+  	int rightNeighbor = (id + 1) % p;
+
+  	string lFile = fileBase + to_string(leftNeighbor);
+  	string rFile = fileBase + to_string(rightNeighbor);
+  	ofstream foutLeft(lFile.c_str(), ios::out | ios::app );
+  	ofstream foutRight(rFile.c_str(), ios::out | ios::app );
 
 	printf("Philosopher %d spawned\n", id);
 	while(msgSent < MAXMESSAGES)
@@ -40,6 +55,21 @@ void phil(int this_id)
 		printf("Philosopher %d is writing %d \n", id, msgSent);
 		msgSent++;
 		//Do the thing
+
+		//Poem code
+		string stanza1, stanza2, stanza3;
+		stanza1 = P.getLine();
+		foutLeft << stanza1 << endl;
+		foutRight << stanza1 << endl;
+
+		stanza2 = P.getLine();
+		foutLeft << stanza2 << endl;
+		foutRight << stanza2 << endl;
+
+		stanza3 = P.getLine();
+		foutLeft << stanza3 << endl << endl;
+		foutRight << stanza3 << endl << endl;
+		
 		sleep(rand()%2);
 
 		MPI_Send(&sigOut, 1, MPI_INT, 0, CHOP_REL, MPI_COMM_WORLD); //Release chopsticks
@@ -47,6 +77,10 @@ void phil(int this_id)
 	}
 	printf("Philosopher %d is exiting\n", id);
 	MPI_Send(&sigOut, 1, MPI_INT, 0, PHIL_DONE, MPI_COMM_WORLD); //Get the check from the waiter
+
+	//Close files
+	foutLeft.close();
+	foutRight.close();
 }
 
 void waiter(int this_id, int p_in)
@@ -154,6 +188,11 @@ int main(int argc, char** argv)
 	MPI_Comm_size(MPI_COMM_WORLD, &p);
 	MPI_Comm_rank(MPI_COMM_WORLD, &id);
 
+	if (p < 3) {
+	    MPI::Finalize ( );
+	    std::cerr << "ERR: Need at least 2 philosophers and one waiter!" << std::endl;
+	    return 1; //non-normal exit
+  }
 	//First thread is waiter, others are phils
 	if(!id)
 	{
