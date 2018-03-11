@@ -28,31 +28,36 @@ void phil(int this_id)
 
 	srand(id + time(NULL));
 
+	printf("Philosopher %d spawned\n", id);
 	while(msgSent < MAXMESSAGES)
 	{
 		//thinking
+		printf("Philosopher %d is sleeping\n", id);
 		sleep(rand()%5);
-
+		printf("Philosopher %d waiting\n", id);
 		MPI_Send(&sigOut, 1, MPI_INT, 0, CHOP_REQ, MPI_COMM_WORLD); //Ask for chopsticks
 		MPI_Recv(&sigIn, 1, MPI_INT, 0, CHOP_RES, MPI_COMM_WORLD, &st); //Wait for chopsticks
+		printf("Philosopher %d is writing %d \n", id, msgSent);
 
 		//Do the thing
-		std::cout << id << " :: " << msgSent << std::endl;
 
 		MPI_Send(&sigOut, 1, MPI_INT, 0, CHOP_REL, MPI_COMM_WORLD); //Release chopsticks
+		printf("Philosopher %d is done \n", id);
 	}
+	printf("Philosopher %d is exiting\n", id);
 	MPI_Send(&sigOut, 1, MPI_INT, 0, PHIL_DONE, MPI_COMM_WORLD); //Get the check from the waiter
 }
 
 void waiter(int this_id, int p_in)
-{
+{	
 	int id = this_id;
 	int p = p_in - 1;
 	int source;
 	int done = 0;
 	int sigIn;
 	int sigOut;
-	MPI_Status st;
+	MPI_Status st;	
+	printf("Table %d spawned\n", id);
 	
 	std::list<int> q;
 
