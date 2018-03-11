@@ -2,14 +2,17 @@
 //run with: 	mpiexec -np 6 philosophers
 
 
+#include "mpi.h"
+#include "pomerize.h"
+#include <cerrno>
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+#include <list>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <fstream>
-#include <list>
 #include <unistd.h>
-#include "mpi.h"
-#include "pomerize.h"
 
 //Defining run limits
 #define MAXMESSAGES 10
