@@ -70,6 +70,10 @@ void waiter(int this_id, int p_in)
 
 	srand(id + time(NULL));
 
+	for(int i = 0; i < p; i++)
+	{
+		printf("%d, ", chops[i]);
+	}
 	while(done != p)
 	{
 		//get signals
