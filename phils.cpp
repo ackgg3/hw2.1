@@ -33,7 +33,7 @@ void phil(int this_id)
 	{
 		//thinking
 		printf("Philosopher %d is sleeping\n", id);
-		sleep(rand()%5);
+		//sleep(rand()%2);
 		printf("Philosopher %d waiting\n", id);
 		MPI_Send(&sigOut, 1, MPI_INT, 0, CHOP_REQ, MPI_COMM_WORLD); //Ask for chopsticks
 		MPI_Recv(&sigIn, 1, MPI_INT, 0, CHOP_RES, MPI_COMM_WORLD, &st); //Wait for chopsticks
