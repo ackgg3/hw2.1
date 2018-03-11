@@ -73,6 +73,7 @@ void waiter(int this_id, int p_in)
 	
 	while(done != p)
 	{
+		printf("Scanning... %d/%d\n", done, p);
 		for(int j = 0; j < p; j++)
 		{
 			printf("%d, ", chops[j]);
