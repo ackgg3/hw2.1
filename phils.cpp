@@ -23,7 +23,7 @@ void phil(int this_id)
 	int id = this_id;
 	int sigIn;
 	int sigOut;
-	int msgSent;
+	int msgSent = 0;
 	MPI_Status st;
 
 	srand(id + time(NULL));
