@@ -39,8 +39,8 @@ void phil(int this_id, int p_in)
 	//filesetup
 	pomerize P; //Poem generator object
 
-	int leftNeighbor = id;
-  	int rightNeighbor = (id + 1) % p;
+	int leftNeighbor = id - 1;
+  	int rightNeighbor = id % p;
 
   	string lFile = fileBase + to_string(leftNeighbor);
   	string rFile = fileBase + to_string(rightNeighbor);
