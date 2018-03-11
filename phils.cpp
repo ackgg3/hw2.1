@@ -15,7 +15,7 @@
 #include <unistd.h>
 
 //Defining run limits
-#define MAXMESSAGES 10
+#define MAXMESSAGES 10000
 
 //Defining request types
 #define CHOP_REQ 1	//request
@@ -74,7 +74,7 @@ void phil(int this_id, int p_in)
 		foutLeft << stanza3 << endl << endl;
 		foutRight << stanza3 << endl << endl;
 		
-		sleep(rand()%2);
+		//sleep(rand()%2);
 
 		MPI_Send(&sigOut, 1, MPI_INT, 0, CHOP_REL, MPI_COMM_WORLD); //Release chopsticks
 		printf("Philosopher %d is done \n", id);
